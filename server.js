@@ -1,86 +1,36 @@
-
 const express = require('express');
 const http = require('http');
-const { Server } = require("socket.io");
+const { Server } = require('socket.io');
+const path = require('path');
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static('public'));
+// Serve files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-// SECURITY LAYERS (RAM Storage)
-const ipLocks = new Map();      // Map<IP_Address, Email>
-const deviceLocks = new Map();  // Map<Device_ID, Email>
-const emailLocks = new Map();   // Map<Email, {ip, deviceId}>
+// Handle default route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
+// Socket.io connection logic
 io.on('connection', (socket) => {
-    // 1. Get Client IP (Standard Check)
-    let clientIp = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address;
-    if (clientIp.substr(0, 7) == "::ffff:") clientIp = clientIp.substr(7);
+    console.log('A user connected:', socket.id);
 
-    socket.on('join_request', ({ email, deviceId }) => {
-        const lowerEmail = email.toLowerCase();
-
-        // --- SECURITY CHECK 1: IP ADDRESS ---
-        if (ipLocks.has(clientIp)) {
-            const lockedEmail = ipLocks.get(clientIp);
-            if (lockedEmail !== lowerEmail) {
-                socket.emit('login_error', `SECURITY ALERT: This IP is already permanently locked to '${lockedEmail}'.`);
-                return;
-            }
-        }
-
-        // --- SECURITY CHECK 2: HARDWARE FINGERPRINT (The "Hard" Part) ---
-        if (deviceLocks.has(deviceId)) {
-            const lockedEmail = deviceLocks.get(deviceId);
-            if (lockedEmail !== lowerEmail) {
-                socket.emit('login_error', `DEVICE RECOGNIZED: This computer is locked to '${lockedEmail}'. changing IPs won't work.`);
-                return;
-            }
-        }
-
-        // --- SECURITY CHECK 3: EMAIL OWNERSHIP ---
-        if (emailLocks.has(lowerEmail)) {
-            const lockData = emailLocks.get(lowerEmail);
-            // If someone tries to use this email from a DIFFERENT Device OR IP
-            if (lockData.deviceId !== deviceId && lockData.ip !== clientIp) {
-                socket.emit('login_error', `IDENTITY THEFT: This email is active on another device.`);
-                return;
-            }
-        }
-
-        // --- LOCK EVERYTHING ---
-        ipLocks.set(clientIp, lowerEmail);
-        deviceLocks.set(deviceId, lowerEmail);
-        emailLocks.set(lowerEmail, { ip: clientIp, deviceId: deviceId });
-        
-        socket.userData = { email: lowerEmail };
-
-        socket.emit('login_success', {
-            email: lowerEmail,
-            userCount: emailLocks.size
-        });
-        
-        io.emit('user_count', emailLocks.size);
-        console.log(`SECURE LOCK: ${lowerEmail} tied to Device: ${deviceId.substr(0,5)}...`);
-    });
-
-    socket.on('chat_message', (msg) => {
-        if (!socket.userData) return;
-        io.emit('chat_message', {
-            text: msg,
-            senderId: socket.id,
-            email: socket.userData.email
-        });
+    // Receive message from client
+    socket.on('chat message', (msg) => {
+        // Send message to everyone
+        io.emit('chat message', msg);
     });
 
     socket.on('disconnect', () => {
-        if (socket.userData) {
-            io.emit('user_count', emailLocks.size);
-        }
+        console.log('User disconnected');
     });
 });
 
-server.listen(3000, () => {
-    console.log('Secure Server running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
