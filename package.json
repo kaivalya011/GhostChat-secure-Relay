@@ -1,20 +1,11 @@
 {
   "name": "ghost-chat-secure",
   "version": "1.0.0",
-  "description": "Secure anonymous chat relay with device fingerprinting",
+  "description": "Secure anonymous chat",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": [
-    "chat",
-    "socket.io",
-    "privacy",
-    "anonymous"
-  ],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.7.4"
