@@ -1,1 +1,33 @@
 
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #eef2f5; }
+.hidden { display: none !important; }
+.screen { height: 100vh; display: flex; flex-direction: column; }
+
+/* Home Screen */
+#screen-home { justify-content: center; align-items: center; }
+.card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 350px; }
+.id-badge { background: #e1effe; color: #1e429f; padding: 10px; border-radius: 6px; font-weight: bold; margin: 15px 0; font-size: 1.2rem; }
+.menu { display: flex; flex-direction: column; gap: 10px; }
+.divider { color: #888; font-size: 0.8rem; margin: 5px 0; }
+
+input { padding: 12px; border: 1px solid #ddd; border-radius: 6px; text-transform: uppercase; text-align: center; }
+button { padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+.btn-primary { background: #3f83f8; color: white; }
+.btn-secondary { background: #0e9f6e; color: white; }
+button:hover { opacity: 0.9; }
+
+/* Chat Screens */
+.chat-header { padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.global-header { background: #3f83f8; }
+.private-header { background: #0e9f6e; }
+.global-header button, .private-header button { background: rgba(255,255,255,0.2); color: white; padding: 5px 15px; }
+
+.message-list { flex-grow: 1; overflow-y: auto; list-style: none; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.message-list li { max-width: 70%; padding: 10px 15px; border-radius: 12px; word-wrap: break-word; }
+.msg-me { align-self: flex-end; background: #3f83f8; color: white; border-bottom-right-radius: 2px; }
+.msg-other { align-self: flex-start; background: #ffffff; color: #333; border: 1px solid #eee; border-bottom-left-radius: 2px; }
+
+.chat-form { background: white; padding: 15px; display: flex; gap: 10px; border-top: 1px solid #eee; }
+.chat-form input { text-align: left; text-transform: none; flex-grow: 1; border-radius: 20px; padding: 10px 20px; background: #f0f2f5; border: none; }
+.chat-form button { width: auto; background: #333; color: white; border-radius: 20px; }
+
