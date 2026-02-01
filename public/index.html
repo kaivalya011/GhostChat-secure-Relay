@@ -3,14 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost Chat</title>
+    <title>Secure Ghost Chat</title>
     <link rel="stylesheet" href="style.css">
+    <script src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 </head>
 <body>
-    <div id="chat-container">
-        <ul id="messages"></ul>
-        <form id="form" action="">
-            <input id="input" autocomplete="off" placeholder="Type a message..." /><button>Send</button>
+
+    <div id="screen-login" class="screen">
+        <div class="card">
+            <h1>Ghost Chat 🔒</h1>
+            <p>One Device. One Account.</p>
+            <form id="login-form">
+                <input type="email" id="email-input" placeholder="Enter your Email" required>
+                <button type="submit" class="btn-primary">Secure Login</button>
+            </form>
+            <p id="login-status" style="color: red; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <div id="screen-home" class="screen hidden">
+        <div class="card">
+            <h2 id="user-email-display"></h2>
+            <div class="id-badge">
+                <span>YOUR CHAT ID:</span>
+                <span id="my-id-display">...</span>
+            </div>
+            
+            <div class="menu">
+                <button id="btn-global" class="btn-primary">🌍 Enter Global Lobby</button>
+                <div class="divider">OR</div>
+                <input type="text" id="target-id-input" placeholder="Friend's Chat ID" maxlength="6">
+                <button id="btn-connect" class="btn-secondary">🔒 Request Private Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-global" class="screen hidden">
+        <div class="chat-header global-header">
+            <span>🌍 Global Lobby</span>
+            <button id="btn-leave-global">Back</button>
+        </div>
+        <ul id="global-messages" class="message-list"></ul>
+        <form id="global-form" class="chat-form">
+            <input id="global-input" autocomplete="off" placeholder="Message everyone..." />
+            <button>Send</button>
+        </form>
+    </div>
+
+    <div id="screen-private" class="screen hidden">
+        <div class="chat-header private-header">
+            <span>🔒 Encrypted Room</span>
+            <button id="btn-leave-private">End</button>
+        </div>
+        <ul id="private-messages" class="message-list"></ul>
+        <form id="private-form" class="chat-form">
+            <input id="private-input" autocomplete="off" placeholder="Secret message..." />
+            <button>Send</button>
         </form>
     </div>
 
