@@ -3,40 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GhostChat | Hardened Security</title>
+    <title>Ghost Chat</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-    
-    <script src="https://openfpcdn.io/fingerprintjs/v3"></script>
 </head>
 <body>
-    <div id="login-overlay">
-        <div class="login-box">
-            <h2>Secure Entry</h2>
-            <p>Scanning Hardware Fingerprint...</p> <form id="login-form">
-                <input type="email" id="email-input" placeholder="Loading ID..." disabled required autocomplete="off">
-                <button type="submit" id="login-btn" disabled>Initializing Security...</button>
-            </form>
-            <div id="login-error" class="error-msg"></div>
-            <p class="disclaimer">Device-Level Lock Active. Multi-accounting is disabled.</p>
-        </div>
-    </div>
-
-    <div class="app-container" id="app-container" style="display:none;">
-        <header class="chat-header">
-            <div class="header-left">
-                <div class="status-dot"></div>
-                <div class="details">
-                    <h3>GhostChat</h3>
-                    <p><span id="online-count">0</span> nodes active</p>
-                </div>
-            </div>
-            <a href="#" class="donate-btn">Support</a>
-        </header>
-        <div class="chat-area" id="chat-area"></div>
-        <form id="chat-form" class="input-area">
-            <input type="text" id="msg-input" placeholder="Type encrypted message..." autocomplete="off" required>
-            <button type="submit">Send</button>
+    <div id="chat-container">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" placeholder="Type a message..." /><button>Send</button>
         </form>
     </div>
 
