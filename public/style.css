@@ -29,3 +29,9 @@ button:hover { opacity: 0.9; }
 .chat-form { background: white; padding: 15px; display: flex; gap: 10px; border-top: 1px solid #eee; }
 .chat-form input { text-align: left; text-transform: none; flex-grow: 1; border-radius: 20px; padding: 10px 20px; background: #f0f2f5; border: none; }
 .chat-form button { width: auto; background: #333; color: white; border-radius: 20px; }
+/* Center the Login Screen */
+#screen-login {
+    justify-content: center;
+    align-items: center;
+    background: #f0f2f5;
+}
