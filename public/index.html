@@ -3,66 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Ghost Chat</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+    <title>Secure Login</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+        .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:disabled { background: #ccc; }
+        .locked-msg { color: red; font-size: 12px; display: none; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
 
-    <div id="screen-login" class="screen">
-        <div class="card">
-            <h1>Ghost Chat 🔒</h1>
-            <p>One Device. One Account.</p>
-            <form id="login-form">
-                <input type="email" id="email-input" placeholder="Enter your Email" required>
-                <button type="submit" class="btn-primary">Secure Login</button>
-            </form>
-            <p id="login-status" style="color: red; margin-top: 10px;"></p>
-        </div>
-    </div>
+<div class="login-box">
+    <h2>Secure Chat</h2>
+    <div id="lockMessage" class="locked-msg">🔒 Device Locked to this Email</div>
+    
+    <form id="loginForm">
+        <input type="hidden" id="deviceId" name="deviceId">
+        
+        <label>Email ID</label>
+        <input type="email" id="emailInput" placeholder="Enter your email" required>
+        
+        <label>Password</label>
+        <input type="password" id="passwordInput" placeholder="Enter password" required>
+        
+        <button type="submit" id="submitBtn">Login / Register</button>
+    </form>
+</div>
 
-    <div id="screen-home" class="screen hidden">
-        <div class="card">
-            <h2 id="user-email-display"></h2>
-            <div class="id-badge">
-                <span>YOUR CHAT ID:</span>
-                <span id="my-id-display">...</span>
-            </div>
-            
-            <div class="menu">
-                <button id="btn-global" class="btn-primary">🌍 Enter Global Lobby</button>
-                <div class="divider">OR</div>
-                <input type="text" id="target-id-input" placeholder="Friend's Chat ID" maxlength="6">
-                <button id="btn-connect" class="btn-secondary">🔒 Request Private Chat</button>
-            </div>
-        </div>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 
-    <div id="screen-global" class="screen hidden">
-        <div class="chat-header global-header">
-            <span>🌍 Global Lobby</span>
-            <button id="btn-leave-global">Back</button>
-        </div>
-        <ul id="global-messages" class="message-list"></ul>
-        <form id="global-form" class="chat-form">
-            <input id="global-input" autocomplete="off" placeholder="Message everyone..." />
-            <button>Send</button>
-        </form>
-    </div>
+<script>
+    // This function runs automatically when the page opens
+    const initDeviceLock = async () => {
+        // 2. Load the library
+        const fp = await FingerprintJS.load();
+        
+        // 3. Get the unique Visitor ID (The Fingerprint)
+        const result = await fp.get();
+        const visitorId = result.visitorId;
+        console.log("Device Fingerprint:", visitorId);
 
-    <div id="screen-private" class="screen hidden">
-        <div class="chat-header private-header">
-            <span>🔒 Encrypted Room</span>
-            <button id="btn-leave-private">End</button>
-        </div>
-        <ul id="private-messages" class="message-list"></ul>
-        <form id="private-form" class="chat-form">
-            <input id="private-input" autocomplete="off" placeholder="Secret message..." />
-            <button>Send</button>
-        </form>
-    </div>
+        // Put the ID in the hidden input so we can send it with the form later
+        document.getElementById('deviceId').value = visitorId;
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="client.js"></script>
+        // 4. CHECK WITH SERVER (Simulated)
+        // In real life, replace this with: fetch('/api/check-device?id=' + visitorId)
+        checkServerForDevice(visitorId); 
+    };
+
+    // 5. The Logic Function
+    async function checkServerForDevice(id) {
+        // --- SIMULATION START ---
+        // Imagine your database sends this response back
+        // Change 'null' to a string like "user@test.com" to test the lock!
+        const mockDatabaseResponse = {
+            isDeviceKnown: false, // Set to true to test locking
+            linkedEmail: null     // Set to "user@example.com" to test locking
+        };
+        // --- SIMULATION END ---
+
+        // REAL IMPLEMENTATION EXAMPLE:
+        /*
+        const response = await fetch('/api/check-device', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ deviceId: id })
+        });
+        const data = await response.json();
+        */
+       
+        // Apply the Lock
+        const emailField = document.getElementById('emailInput');
+        const lockMsg = document.getElementById('lockMessage');
+
+        if (mockDatabaseResponse.isDeviceKnown) {
+            // LOCK THE DEVICE
+            emailField.value = mockDatabaseResponse.linkedEmail; // Fill the email
+            emailField.disabled = true; // Block typing
+            emailField.style.backgroundColor = "#e9ecef"; 
+            lockMsg.style.display = "block"; // Show "Locked" message
+        }
+    }
+
+    // Run the script
+    initDeviceLock();
+</script>
+
 </body>
 </html>
