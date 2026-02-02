@@ -14,7 +14,7 @@
     {
   "email": "alex@gmail.com",
   "password": "hashed_password",
-  "deviceId": "a1b2c3d4e5f6..."  // <--- You must save this!
+  "deviceId": "a1b2c3d4e5f6..." 
 }
   }
     }
